@@ -14,7 +14,7 @@ class Window:
         self.img = ImageTk.PhotoImage(image=Image.fromarray(self.ImageMatrix))
 
         self.frame = tkinter.Frame(self.main, background="white")
-        self.canvas = tkinter.Canvas(self.frame, width=600, height=600)
+        self.canvas = tkinter.Canvas(self.frame, width=800, height=600)
         self.canvas.pack(side="left", fill="y")
         self.canvas.create_image(0, 0, anchor="nw", image=self.img)
         self.frame.pack()
