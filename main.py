@@ -9,7 +9,7 @@ def main():
     top = tkinter.Toplevel(root)
     top.protocol("WM_DELETE_WINDOW", root.destroy)
 
-    Window(top)
+    appWindow = Window(top)
     top.title("Lattice Boltzman Automata by Piotr Wilkosz")
     top.mainloop()
 
