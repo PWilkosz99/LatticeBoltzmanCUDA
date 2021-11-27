@@ -7,10 +7,12 @@ from Automata import *
 class Window:
     def __init__(self, main):
         self.main = main
-        self.ImageMatrix = numpy.zeros([600, 800, 3], dtype=numpy.uint8) #RGB
-        self.StateMatrix = numpy.zeros([600, 800, 4], dtype=numpy.uint8) #NSWE
+        self.ImageMatrix = numpy.zeros([600, 800, 3], dtype=numpy.uint8)  # RGB
+        self.StateMatrix = numpy.zeros(
+            [600, 800, 4], dtype=numpy.uint8)  # NSWE
 
-        self.ImageMatrix, self.StateMatrix = generateMatrix(self.ImageMatrix, self.StateMatrix)
+        self.ImageMatrix, self.StateMatrix = generateMatrix(
+            self.ImageMatrix, self.StateMatrix)
         self.img = ImageTk.PhotoImage(image=Image.fromarray(self.ImageMatrix))
 
         self.frame = tkinter.Frame(self.main, background="white")

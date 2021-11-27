@@ -1,7 +1,7 @@
 import tkinter
-from Automata import generateMatrix
-from Window import Window
+from Window import *
 from Automata import *
+
 
 def main():
     root = tkinter.Tk()
@@ -12,6 +12,7 @@ def main():
     appWindow = Window(top)
     top.title("Lattice Boltzman Automata by Piotr Wilkosz")
     top.mainloop()
+
 
 if __name__ == '__main__':
     main()
