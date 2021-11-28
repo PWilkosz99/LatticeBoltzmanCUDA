@@ -8,8 +8,7 @@ class Window:
     def __init__(self, main):
         self.main = main
         self.ImageMatrix = numpy.zeros([600, 800, 3], dtype=numpy.uint8)  # RGB
-        self.StateMatrix = numpy.zeros(
-            [600, 800, 4], dtype=numpy.uint8)  # NSWE
+        self.StateMatrix = numpy.zeros([600, 800, 4], dtype=numpy.uint8)  # NSWE or solid
 
         self.ImageMatrix, self.StateMatrix = generateMatrix(
             self.ImageMatrix, self.StateMatrix)
