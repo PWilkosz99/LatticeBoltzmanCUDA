@@ -9,7 +9,7 @@ def generateMatrix(ImageMatrix, StateMatrix):
     # Generate starting particles
     for x in range(294):
         for y in range(600):  # fill with value only part of matrixes
-            if(randomByProbability(0.5)):  # 0-1
+            if(randomByProbability(0.05)):  # 0-1
                 ImageMatrix[y][x] = [255, 0, 0]
                 # on the start each generated patricle on each cell flow in only one dirtection
                 StateMatrix[y][x][random.randint(0, 3)] = 1
@@ -58,29 +58,25 @@ def simulate(ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx):
             else:
                 if(StateMatrix[y][x][0] == 1):  # North
                     if(y <= 1 or StateMatrix[y-1][x][4] == 1):
-                        print("out of bound")
-                        #TODO reverse direction
+                        newStateMatrx[y][x][1]=1
                     else:
                         newStateMatrx[y-1][x][0] = 1
                         newImageMatrix[y-1][x] = [255, 0, 0]
                 if(StateMatrix[y][x][1] == 1):  # South
                     if(y >= 599 or StateMatrix[y+1][x][4] == 1):
-                        print("out of bound")
-                        #TODO reverse direction
+                        newStateMatrx[y][x][0]=1
                     else:
                         newStateMatrx[y+1][x][1] = 1
                         newImageMatrix[y+1][x] = [255, 0, 0]
                 if(StateMatrix[y][x][2] == 1):  # West
                     if(x <= 1 or StateMatrix[y][x-1][2] == 1):
-                        print("out of bound")
-                        #TODO reverse direction
+                        newStateMatrx[y][x][3]=1
                     else:
                         newStateMatrx[y][x-1][2] = 1
                         newImageMatrix[y][x-1] = [255, 0, 0]
                 if(StateMatrix[y][x][3] == 1):  # East
                     if(x >= 799 or StateMatrix[y][x+1][3] == 1):
-                        print("out of bound")
-                        #TODO reverse direction
+                        newStateMatrx[y][x][2]=1
                     else:
                         newStateMatrx[y][x+1][3] = 1
                         newImageMatrix[y][x+1] = [255, 0, 0]
