@@ -30,7 +30,7 @@ def generateMatrix(ImageMatrix, StateMatrix):
 # 0:N 1:S 2:W 3:E 4:SOLID
 
 
-def transitionRule(ImageMatrix, StateMatrix, canvas):
+def transitionRule(ImageMatrix, StateMatrix, main, canvas):
     newImageMatrix = numpy.zeros([600, 800, 3], dtype=numpy.uint8)
     newStateMatrx = numpy.zeros([600, 800, 5], dtype=numpy.uint8)
 
@@ -40,7 +40,7 @@ def transitionRule(ImageMatrix, StateMatrix, canvas):
     image = ImageTk.PhotoImage(image=Image.fromarray(newImageMatrix))
     canvas.image = image
     canvas.create_image(0, 0, anchor="nw", image=image)
-
+    main.after(10, lambda: transitionRule(newImageMatrix, newStateMatrx, main, canvas)) #recurensive
 
 def simulate(ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx):
     for x in range(800):  # TODO automatic range
@@ -53,12 +53,19 @@ def simulate(ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx):
             if(StateMatrix[y][x][4] == 1): # wall stay on the same position and don't influence on other cells
                 newStateMatrx[y][x][4] = 1
                 newImageMatrix[y][x] = [255, 255, 255]
-            if(StateMatrix[y][x][0] == 1):
-                if(y >= 599):
-                    print("out of bound")
-                    #TODO reverse direction
-                else:
-                    newStateMatrx[y+1][x][0] = 1
-                    newImageMatrix[y+1][x] = [255, 0, 0]
+            else:
+                if(StateMatrix[y][x][0] == 1):
+                    if(y <= 1 or StateMatrix[y-1][x][4]==1):
+                        print("out of bound")
+                        #TODO reverse direction
+                    else:
+                        newStateMatrx[y-1][x][0] = 1
+                        newImageMatrix[y-1][x] = [255, 0, 0]
 
     return newImageMatrix, newStateMatrx
+    
+# 0 1 2 3 *
+# 1
+# 2
+# 3
+# *

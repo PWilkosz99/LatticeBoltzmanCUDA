@@ -21,4 +21,4 @@ class Window:
         self.canvas.create_image(0, 0, anchor="nw", image=self.img)
         self.frame.pack()   
 
-        self.main.after(50, lambda: transitionRule(self.ImageMatrix, self.StateMatrix, self.canvas))
+        self.main.after(50, lambda: transitionRule(self.ImageMatrix, self.StateMatrix, self.main, self.canvas))
