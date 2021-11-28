@@ -9,7 +9,7 @@ def generateMatrix(ImageMatrix, StateMatrix):
     # Generate starting particles
     for x in range(294):
         for y in range(600):  # fill with value only part of matrixes
-            StateMatrix[x][y][0] = 1  # example
+            StateMatrix[y][x][0] = 1  # example
             if(randomByProbability(0.5)):  # 0-1
                 ImageMatrix[y][x] = [255, 0, 0]
             else:  # TODO repair weird triangle inside random image
@@ -26,12 +26,35 @@ def generateMatrix(ImageMatrix, StateMatrix):
             StateMatrix[y][x] = 5
     return ImageMatrix, StateMatrix
 
+# 0:N 1:S 2:W 3:E 4:SOLID
+
+
 def transitionRule(ImageMatrix, StateMatrix, canvas):
-    newImageMatrix = numpy.zeros([600, 800, 3], dtype=numpy.uint8) 
-    newStateMatrx = numpy.zeros([600, 800, 5], dtype=numpy.uint8) 
-    for x in range(800): #TODO automatic range
-        for y in range(600):
-            newImageMatrix[y][x] = [0, 255, 0]
+    newImageMatrix = numpy.zeros([600, 800, 3], dtype=numpy.uint8)
+    newStateMatrx = numpy.zeros([600, 800, 5], dtype=numpy.uint8)
+
+    newImageMatrix, newStateMatrx = simulate(
+        ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx)
+
     image = ImageTk.PhotoImage(image=Image.fromarray(newImageMatrix))
-    canvas.image=image
+    canvas.image = image
     canvas.create_image(0, 0, anchor="nw", image=image)
+
+
+def simulate(ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx):
+    for x in range(800):  # TODO automatic range
+        for y in range(600):
+            stateCouter = 0
+            #for s in range(5):
+            #     if(StateMatrix[y][x][s] == 1):
+            #         stateCouter += 1
+            # if(stateCouter > 1):
+            if(StateMatrix[y][x][0] == 1):
+                if(y>=599):
+                    print("out of bound")
+                    #TODO reverse direction 
+                else:
+                    newStateMatrx[y+1][x][0] = 1
+                    newImageMatrix[y+1][x] = [255, 0, 0]
+
+    return newImageMatrix, newStateMatrx
