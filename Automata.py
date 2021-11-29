@@ -53,8 +53,8 @@ def simulate(ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx):
             for s in range(5):
                 if(StateMatrix[y][x][s] == 1):
                     stateCouter += 1
-            if(stateCouter == 2):
-                if(x <= 1 & y <= 1 & x >= newImageMatrix.shape[1]-1 & y >= newImageMatrix.shape[0]-1): #TODO : case when they hit wall
+            if(stateCouter == 2 & StateMatrix[y][x][0] == 1 & StateMatrix[y][x][1] == 1 | stateCouter == 2 & StateMatrix[y][x][2] == 1 & StateMatrix[y][x][3] == 1):
+                if(x <= 1 & y <= 1 & x >= newImageMatrix.shape[1]-1 & y >= newImageMatrix.shape[0]-1):
                     if(StateMatrix[y][x][0] == 1 & StateMatrix[y][x][1] == 1):
                         StateMatrix[y][x-1][2] = 1
                         StateMatrix[y][x+1][3] = 1
