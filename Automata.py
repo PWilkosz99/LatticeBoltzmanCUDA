@@ -29,7 +29,6 @@ def generateMatrix(ImageMatrix, StateMatrix):
 
 # 0:N 1:S 2:W 3:E 4:SOLID
 
-
 def transitionRule(ImageMatrix, StateMatrix, main, canvas):
     newImageMatrix = numpy.zeros(
         [ImageMatrix.shape[0], ImageMatrix.shape[1], 3], dtype=numpy.uint8)
@@ -45,7 +44,6 @@ def transitionRule(ImageMatrix, StateMatrix, main, canvas):
     main.after(1, lambda: transitionRule(newImageMatrix,
                newStateMatrx, main, canvas))  # recurensive
 
-
 def simulate(ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx):
     for x in range(newImageMatrix.shape[1]):  # X:1 Y:2
         for y in range(newImageMatrix.shape[0]):
@@ -53,8 +51,8 @@ def simulate(ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx):
             for s in range(5):
                 if(StateMatrix[y][x][s] == 1):
                     stateCouter += 1
-            if(stateCouter == 2 & StateMatrix[y][x][0] == 1 & StateMatrix[y][x][1] == 1 | stateCouter == 2 & StateMatrix[y][x][2] == 1 & StateMatrix[y][x][3] == 1):
-                if(x <= 1 & y <= 1 & x >= newImageMatrix.shape[1]-1 & y >= newImageMatrix.shape[0]-1):
+            if((stateCouter == 2 and StateMatrix[y][x][0] == 1 and StateMatrix[y][x][1] == 1) or (stateCouter == 2 and StateMatrix[y][x][2] == 1 and StateMatrix[y][x][3] == 1)):
+                if(x >= 1 & y >= 1 & x <= newImageMatrix.shape[1]-1 & y <= newImageMatrix.shape[0]-1):
                     if(StateMatrix[y][x][0] == 1 & StateMatrix[y][x][1] == 1):
                         StateMatrix[y][x-1][2] = 1
                         StateMatrix[y][x+1][3] = 1
