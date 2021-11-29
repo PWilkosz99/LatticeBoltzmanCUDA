@@ -53,35 +53,49 @@ def simulate(ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx):
             for s in range(5):
                 if(StateMatrix[y][x][s] == 1):
                     stateCouter += 1
-            # wall stay on the same position and don't influence on other cells
-            if(StateMatrix[y][x][4] == 1):
-                newStateMatrx[y][x][4] = 1
-                newImageMatrix[y][x] = [255, 255, 255]
-            else:
-                if(StateMatrix[y][x][0] == 1):  # North
-                    if(y <= 1 or StateMatrix[y-1][x][4] == 1):
-                        newStateMatrx[y][x][1] = 1
-                    else:
-                        newStateMatrx[y-1][x][0] = 1
-                        newImageMatrix[y-1][x] = [255, 0, 0]
-                if(StateMatrix[y][x][1] == 1):  # South
-                    if(y >= newImageMatrix.shape[0]-1 or StateMatrix[y+1][x][4] == 1):
-                        newStateMatrx[y][x][0] = 1
-                    else:
-                        newStateMatrx[y+1][x][1] = 1
-                        newImageMatrix[y+1][x] = [255, 0, 0]
-                if(StateMatrix[y][x][2] == 1):  # West
-                    if(x <= 1 or StateMatrix[y][x-1][2] == 1):
-                        newStateMatrx[y][x][3] = 1
-                    else:
-                        newStateMatrx[y][x-1][2] = 1
+            if(stateCouter == 2):
+                if(x <= 1 & y <= 1 & x >= newImageMatrix.shape[1]-1 & y >= newImageMatrix.shape[0]-1): #TODO : case when they hit wall
+                    if(StateMatrix[y][x][0] == 1 & StateMatrix[y][x][1] == 1):
+                        StateMatrix[y][x-1][2] = 1
+                        StateMatrix[y][x+1][3] = 1
                         newImageMatrix[y][x-1] = [255, 0, 0]
-                if(StateMatrix[y][x][3] == 1):  # East
-                    if(x >= newImageMatrix.shape[1]-1 or StateMatrix[y][x+1][3] == 1):
-                        newStateMatrx[y][x][2] = 1
-                    else:
-                        newStateMatrx[y][x+1][3] = 1
-                        newImageMatrix[y][x+1] = [255, 0, 0]
+                        newImageMatrix[y][x+2] = [255, 0, 0]
+                    elif(StateMatrix[y][x][2] == 1 & StateMatrix[y][x][3] == 1):
+                        StateMatrix[y-1][x][0] = 1
+                        StateMatrix[y+1][x+1][1] = 1
+                        newImageMatrix[y-1][x] = [255, 0, 0]
+                        newImageMatrix[y+1][x] = [255, 0, 0]
+                    #TODO : case when they bounce on 90'
+            else:
+                # wall stay on the same position and don't influence on other cells
+                if(StateMatrix[y][x][4] == 1):
+                    newStateMatrx[y][x][4] = 1
+                    newImageMatrix[y][x] = [255, 255, 255]
+                else:
+                    if(StateMatrix[y][x][0] == 1):  # North
+                        if(y <= 1 or StateMatrix[y-1][x][4] == 1):
+                            newStateMatrx[y][x][1] = 1
+                        else:
+                            newStateMatrx[y-1][x][0] = 1
+                            newImageMatrix[y-1][x] = [255, 0, 0]
+                    if(StateMatrix[y][x][1] == 1):  # South
+                        if(y >= newImageMatrix.shape[0]-1 or StateMatrix[y+1][x][4] == 1):
+                            newStateMatrx[y][x][0] = 1
+                        else:
+                            newStateMatrx[y+1][x][1] = 1
+                            newImageMatrix[y+1][x] = [255, 0, 0]
+                    if(StateMatrix[y][x][2] == 1):  # West
+                        if(x <= 1 or StateMatrix[y][x-1][2] == 1):
+                            newStateMatrx[y][x][3] = 1
+                        else:
+                            newStateMatrx[y][x-1][2] = 1
+                            newImageMatrix[y][x-1] = [255, 0, 0]
+                    if(StateMatrix[y][x][3] == 1):  # East
+                        if(x >= newImageMatrix.shape[1]-1 or StateMatrix[y][x+1][3] == 1):
+                            newStateMatrx[y][x][2] = 1
+                        else:
+                            newStateMatrx[y][x+1][3] = 1
+                            newImageMatrix[y][x+1] = [255, 0, 0]
 
     return newImageMatrix, newStateMatrx
 
