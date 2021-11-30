@@ -2,14 +2,16 @@ from tkinter import Canvas
 import numpy
 from Utilities import *
 from PIL import ImageTk, Image
+import numba
+from numba import prange
 
-
+@numba.jit(nopython=True, parallel=True)
 def generateMatrix(ImageMatrix, StateMatrix):
 
     # Generate starting particles
-    for x in range(294):
-        for y in range(600):  # fill with value only part of matrixes
-            if(randomByProbability(0.05)):  # 0-1
+    for x in prange(294):
+        for y in prange(600):  # fill with value only part of matrixes
+            if(random.random() < 0.5):  # 0-1
                 ImageMatrix[y][x] = [255, 0, 0]
                 # on the start each generated patricle on each cell flow in only one dirtection
                 StateMatrix[y][x][random.randint(0, 3)] = 1
@@ -17,18 +19,17 @@ def generateMatrix(ImageMatrix, StateMatrix):
                 ImageMatrix[x][y] = [0, 0, 0]
 
     # Generate central wall
-    for y in range(0, 250):
-        for x in range(295, 305):
+    for y in prange(0, 250):
+        for x in prange(295, 305):
             ImageMatrix[y][x] = [255, 255, 255]
             StateMatrix[y][x][4] = 1
-    for y in range(350, 600):
-        for x in range(295, 305):
+    for y in prange(350, 600):
+        for x in prange(295, 305):
             ImageMatrix[y][x] = [255, 255, 255]
             StateMatrix[y][x][4] = 1
     return ImageMatrix, StateMatrix
 
 # 0:N 1:S 2:W 3:E 4:SOLID
-
 def transitionRule(ImageMatrix, StateMatrix, main, canvas):
     newImageMatrix = numpy.zeros(
         [ImageMatrix.shape[0], ImageMatrix.shape[1], 3], dtype=numpy.uint8)
@@ -38,17 +39,20 @@ def transitionRule(ImageMatrix, StateMatrix, main, canvas):
     newImageMatrix, newStateMatrx = simulate(
         ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx)
 
+    #print(simulate.parallel_diagnostics(level=4))
+
     image = ImageTk.PhotoImage(image=Image.fromarray(newImageMatrix))
     canvas.image = image
     canvas.create_image(0, 0, anchor="nw", image=image)
     main.after(1, lambda: transitionRule(newImageMatrix,
-               newStateMatrx, main, canvas))  # recurensive
+              newStateMatrx, main, canvas))  # recurensive
 
+@numba.jit(nopython=True, parallel=True)
 def simulate(ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx):
-    for x in range(newImageMatrix.shape[1]):  # X:1 Y:2
-        for y in range(newImageMatrix.shape[0]):
+    for x in prange(newImageMatrix.shape[1]):  # X:1 Y:2
+        for y in prange(newImageMatrix.shape[0]):
             stateCouter = 0
-            for s in range(5):
+            for s in prange(5):
                 if(StateMatrix[y][x][s] == 1):
                     stateCouter += 1
             if((stateCouter == 2 and StateMatrix[y][x][0] == 1 and StateMatrix[y][x][1] == 1) or (stateCouter == 2 and StateMatrix[y][x][2] == 1 and StateMatrix[y][x][3] == 1)):
