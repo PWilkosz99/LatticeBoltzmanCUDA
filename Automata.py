@@ -13,6 +13,9 @@ def generateMatrix(ImageMatrix, StateMatrix):
     # Generate starting particles
     for x in prange(294):
         for y in prange(600):  # fill with value only part of matrixes
+            if(x==0 or y==0 or x==800 or y==600):     # Generate wall around
+                ImageMatrix[y][x] = [255, 255, 255]
+                StateMatrix[y][x][4] = 1
             if(random.random() < 0.5):  # 0-1
                 ImageMatrix[y][x] = [255, 0, 0]
                 # on the start each generated patricle on each cell flow in only one dirtection
