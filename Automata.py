@@ -33,17 +33,16 @@ def generateMatrix(ImageMatrix, StateMatrix):
             ImageMatrix[y][x] = [255, 255, 255]
             StateMatrix[y][x][4] = 1
 
-
     for y in prange(0, 600):
-            ImageMatrix[y][1] = [255, 255, 255]
-            StateMatrix[y][1][4] = 1         
-            ImageMatrix[y][799] = [255, 255, 255]
-            StateMatrix[y][798][4] = 1
+        ImageMatrix[y][1] = [255, 255, 255]
+        StateMatrix[y][1][4] = 1
+        ImageMatrix[y][799] = [255, 255, 255]
+        StateMatrix[y][798][4] = 1
     for x in prange(0, 800):
-            ImageMatrix[1][x] = [255, 255, 255]
-            StateMatrix[1][x][4] = 1
-            ImageMatrix[598][x] = [255, 255, 255]
-            StateMatrix[598][x][4] = 1
+        ImageMatrix[1][x] = [255, 255, 255]
+        StateMatrix[1][x][4] = 1
+        ImageMatrix[598][x] = [255, 255, 255]
+        StateMatrix[598][x][4] = 1
 
     return ImageMatrix, StateMatrix
 
@@ -70,8 +69,8 @@ def transitionRule(ImageMatrix, StateMatrix, main, canvas):
 
 @numba.jit(nopython=True, parallel=True)
 def simulate(ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx):
-    for x in prange(1, newImageMatrix.shape[1]):  # X:1 Y:0
-        for y in prange(1, newImageMatrix.shape[0]):
+    for x in prange(1, newImageMatrix.shape[1]-1):  # X:1 Y:0
+        for y in prange(1, newImageMatrix.shape[0]-1):
             stateTmp = StateMatrix[y][x]
             if(stateTmp[4] != 1):
                 stateN = StateMatrix[y-1][x][1]
@@ -121,7 +120,7 @@ def simulate(ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx):
                         else:
                             newStateMatrx[y][x][2] = 1
                             newImageMatrix[y][x] = [255, 0, 0]
-                            
+
                     pass
             else:  # wall stay on the same position and don't influence on other cells
                 newStateMatrx[y][x][4] = 1
