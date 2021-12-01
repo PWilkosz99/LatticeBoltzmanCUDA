@@ -13,7 +13,7 @@ def generateMatrix(ImageMatrix, StateMatrix):
     # Generate starting particles
     for x in prange(294):
         for y in prange(600):  # fill with value only part of matrixes
-            if(x==0 or y==0 or x==800 or y==600):     # Generate wall around
+            if(x == 0 or y == 0 or x == 800 or y == 600):     # Generate wall around
                 ImageMatrix[y][x] = [255, 255, 255]
                 StateMatrix[y][x][4] = 1
             if(random.random() < 0.5):  # 0-1
@@ -57,49 +57,39 @@ def transitionRule(ImageMatrix, StateMatrix, main, canvas):
 
 @numba.jit(nopython=True, parallel=True)
 def simulate(ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx):
-    for x in prange(newImageMatrix.shape[1]):  # X:1 Y:0
-        for y in prange(newImageMatrix.shape[0]):
+    for x in prange(1, newImageMatrix.shape[1]-1):  # X:1 Y:0
+        for y in prange(1, newImageMatrix.shape[0]-1):
             stateTmp = StateMatrix[y][x]
             if(stateTmp[4] != 1):
-                if(stateTmp[0]==1 and stateTmp[1]==1 and stateTmp[2]==0 and stateTmp[3]==0):
-                    if(x-1>=0):
-                        newStateMatrx[y][x-1][2] = 1
-                        newImageMatrix[y][x-1] = [255, 0, 0]
-                    if(x+1<=newImageMatrix.shape[0]):
-                        newStateMatrx[y][x+1][3] = 1
-                        newImageMatrix[y][x+1] = [255, 0, 0]
-                elif(stateTmp[0]==0 and stateTmp[1]==0 and stateTmp[2]==1 and stateTmp[3]==1):
-                    if(y-1>=0):
-                        #newStateMatrx[y-1][x][0] = 1 #problem when program simultaneously save data to the same cell
-                        newImageMatrix[y-1][x] = [255, 0, 0] # TODO: rewrite the enitre method
-                    if(y+1<=newImageMatrix.shape[1]):
-                        newStateMatrx[y+1][x][1] = 1
-                        newImageMatrix[y+1][x] = [255, 0, 0]
+                stateN = StateMatrix[y-1][x][1]
+                stateS = StateMatrix[y+1][x][0]
+                stateW = StateMatrix[y][x-1][3]
+                stateE = StateMatrix[y][x+1][2]
+
+                if(stateN == 1 and stateS == 1 and stateW == 0 and stateE == 0):
+                    newStateMatrx[y][x][2] = 1
+                    newStateMatrx[y][x][3] = 1
+                    newImageMatrix[y][x] = [255, 0, 0]
+                elif(stateN == 0 and stateS == 0 and stateW == 1 and stateE == 1):
+                    newStateMatrx[y][x][0] = 1
+                    newStateMatrx[y][x][1] = 1
+                    newImageMatrix[y][x] = [255, 0, 0]
+                    pass
                 else:
-                    if(stateTmp[0] == 1):  # North
-                        if(y <= 1 or StateMatrix[y-1][x][4] == 1):
-                            newStateMatrx[y][x][1] = 1
-                        else:
-                            newStateMatrx[y-1][x][0] = 1
-                            newImageMatrix[y-1][x] = [255, 0, 0]
-                    if(stateTmp[1] == 1):  # South
-                        if(y >= newImageMatrix.shape[0]-1 or StateMatrix[y+1][x][4] == 1):
-                            newStateMatrx[y][x][0] = 1
-                        else:
-                            newStateMatrx[y+1][x][1] = 1
-                            newImageMatrix[y+1][x] = [255, 0, 0]
-                    if(stateTmp[2] == 1):  # West
-                        if(x <= 1 or StateMatrix[y][x-1][2] == 1):
-                            newStateMatrx[y][x][3] = 1
-                        else:
-                            newStateMatrx[y][x-1][2] = 1
-                            newImageMatrix[y][x-1] = [255, 0, 0]
-                    if(stateTmp[3] == 1):  # East
-                        if(x >= newImageMatrix.shape[1]-1 or StateMatrix[y][x+1][3] == 1):
-                            newStateMatrx[y][x][2] = 1
-                        else:
-                            newStateMatrx[y][x+1][3] = 1
-                            newImageMatrix[y][x+1] = [255, 0, 0]
+                    if(stateN == 1):
+                        newStateMatrx[y][x][1] = 1
+                        newImageMatrix[y][x] = [255, 0, 0]
+                    if(stateS == 1):
+                        newStateMatrx[y][x][0] = 1
+                        newImageMatrix[y][x] = [255, 0, 0]
+                    if(stateW == 1):
+                        newStateMatrx[y][x][3] = 1
+                        newImageMatrix[y][x] = [255, 0, 0]
+                    if(stateE == 1):
+                        newStateMatrx[y][x][2] = 1
+                        newImageMatrix[y][x] = [255, 0, 0]
+
+                    pass
             else:  # wall stay on the same position and don't influence on other cells
                 newStateMatrx[y][x][4] = 1
                 newImageMatrix[y][x] = [255, 255, 255]
