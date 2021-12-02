@@ -13,14 +13,11 @@ def generateMatrix(ImageMatrix, StateMatrix):
     # Generate starting particles
     for x in prange(294):
         for y in prange(600):  # fill with value only part of matrixes
-            # if(x == 1 or y ==1 or x == 799 or x == 550 or y == 599 or y == 500):     # Generate wall around
-            #     ImageMatrix[y][x] = [255, 255, 255]
-            #     StateMatrix[y][x][4] = 1
             if(random.random() < 0.5):  # 0-1
                 ImageMatrix[y][x] = [255, 0, 0]
                 # on the start each generated patricle on each cell flow in only one dirtection
                 StateMatrix[y][x][random.randint(0, 3)] = 1
-            else:  # TODO repair weird triangle inside random image
+            else:
                 ImageMatrix[x][y] = [0, 0, 0]
 
     # Generate central wall
@@ -95,31 +92,27 @@ def simulate(ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx):
                     if(stateN == 1):
                         if(stateSolidS == 1):
                             newStateMatrx[y][x][0] = 1
-                            newImageMatrix[y][x] = [255, 0, 0]
                         else:
                             newStateMatrx[y][x][1] = 1
-                            newImageMatrix[y][x] = [255, 0, 0]
+                        newImageMatrix[y][x] = [255, 0, 0]
                     if(stateS == 1):
                         if(stateSolidN == 1):
                             newStateMatrx[y][x][1] = 1
-                            newImageMatrix[y][x] = [255, 0, 0]
                         else:
                             newStateMatrx[y][x][0] = 1
-                            newImageMatrix[y][x] = [255, 0, 0]
+                        newImageMatrix[y][x] = [255, 0, 0]
                     if(stateW == 1):
                         if(stateSolidE == 1):
                             newStateMatrx[y][x][2] = 1
-                            newImageMatrix[y][x] = [255, 0, 0]
                         else:
                             newStateMatrx[y][x][3] = 1
-                            newImageMatrix[y][x] = [255, 0, 0]
+                        newImageMatrix[y][x] = [255, 0, 0]
                     if(stateE == 1):
                         if(stateSolidW == 1):
                             newStateMatrx[y][x][3] = 1
-                            newImageMatrix[y][x] = [255, 0, 0]
                         else:
                             newStateMatrx[y][x][2] = 1
-                            newImageMatrix[y][x] = [255, 0, 0]
+                        newImageMatrix[y][x] = [255, 0, 0]
 
                     pass
             else:  # wall stay on the same position and don't influence on other cells
