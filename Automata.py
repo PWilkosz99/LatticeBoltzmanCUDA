@@ -1,10 +1,8 @@
-from os import stat
-from tkinter import Canvas
 import numpy
-from Utilities import *
 from PIL import ImageTk, Image
 import numba
 from numba import prange
+from Utilities import *
 
 
 @numba.jit(nopython=True, parallel=True)
@@ -53,19 +51,18 @@ def transitionRule(ImageMatrix, StateMatrix, main, canvas):
         [ImageMatrix.shape[0], ImageMatrix.shape[1], 5], dtype=numpy.uint8)
 
     newImageMatrix, newStateMatrx = simulate(
-        ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx)
-
+        StateMatrix, newImageMatrix, newStateMatrx)
     #print(simulate.parallel_diagnostics(level=4))
 
     image = ImageTk.PhotoImage(image=Image.fromarray(newImageMatrix))
     canvas.image = image
     canvas.create_image(0, 0, anchor="nw", image=image)
     main.after(1, lambda: transitionRule(newImageMatrix,
-                                         newStateMatrx, main, canvas))  # recurensive
+                                         newStateMatrx, main, canvas))  # recursively
 
 
 @numba.jit(nopython=True, parallel=True)
-def simulate(ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx):
+def simulate(StateMatrix, newImageMatrix, newStateMatrx):
     for x in prange(1, newImageMatrix.shape[1]-1):  # X:1 Y:0
         for y in prange(1, newImageMatrix.shape[0]-1):
             stateTmp = StateMatrix[y][x]
@@ -87,7 +84,6 @@ def simulate(ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx):
                     newStateMatrx[y][x][0] = 1
                     newStateMatrx[y][x][1] = 1
                     newImageMatrix[y][x] = [255, 0, 0]
-                    pass
                 else:
                     if(stateN == 1):
                         if(stateSolidS == 1):
@@ -113,15 +109,9 @@ def simulate(ImageMatrix, StateMatrix, newImageMatrix, newStateMatrx):
                         else:
                             newStateMatrx[y][x][2] = 1
                         newImageMatrix[y][x] = [255, 0, 0]
-
-                    pass
             else:  # wall stay on the same position and don't influence on other cells
                 newStateMatrx[y][x][4] = 1
                 newImageMatrix[y][x] = [255, 255, 255]
-
-
-#TODO : case when they bounce on 90'
-
     return newImageMatrix, newStateMatrx
 
 # 0 1 2 3 *
