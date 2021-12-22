@@ -22,7 +22,7 @@ def generateMatrix(ImageMatrix, StateMatrix):
     for y in prange(0, 250):
         for x in prange(295, 305):
             ImageMatrix[y][x] = [255, 255, 255]
-            StateMatrix[y][x][4] = 1
+            StateMatrix[y][x][4] = 255
     for y in prange(350, 600):
         for x in prange(295, 305):
             ImageMatrix[y][x] = [255, 255, 255]
@@ -109,13 +109,29 @@ def simulate(StateMatrix, newImageMatrix, newStateMatrx):
                         else:
                             newStateMatrx[y][x][2] = 1
                         newImageMatrix[y][x] = [255, 0, 0]
-            else:  # wall stay on the same position and don't influence on other cells
+            else:
                 newStateMatrx[y][x][4] = 1
                 newImageMatrix[y][x] = [255, 255, 255]
     return newImageMatrix, newStateMatrx
 
-# 0 1 2 3 *
-# 1
-# 2
-# 3
-# *
+
+def simulate2(StateMatrix, newImageMatrix, newStateMatrx):
+        for x in prange(1, newImageMatrix.shape[1]-1):  # X:1 Y:0
+            for y in prange(1, newImageMatrix.shape[0]-1):
+                stateTmp = StateMatrix[y][x]
+                if(stateTmp[4] != 1):
+                    stateN = StateMatrix[y-1][x][1]
+                    stateS = StateMatrix[y+1][x][0]
+                    stateW = StateMatrix[y][x-1][3]
+                    stateE = StateMatrix[y][x+1][2]
+                    stateSolidN = StateMatrix[y-1][x][4]
+                    stateSolidS = StateMatrix[y+1][x][4]
+                    stateSolidW = StateMatrix[y][x-1][4]
+                    stateSolidE = StateMatrix[y][x+1][4]
+
+
+    # 0 1 2 3 *
+    # 1
+    # 2
+    # 3
+    # *
