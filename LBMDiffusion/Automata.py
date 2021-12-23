@@ -20,9 +20,9 @@ def generateMatrix(ImageMatrix, StateMatrix, MacroscopicMatrix):
                 StateMatrix[y][x][2] = 1
                 StateMatrix[y][x][3] = 1
             else:
-                ImageMatrix[x][y] = [0, 0, 0]
+                ImageMatrix[y][x] = [0, 0, 0]
 
-            MacroscopicMatrix[x][y] = 255
+            MacroscopicMatrix[y][x] = 255
 
     # Generate central wall
     for y in prange(0, 250):
@@ -100,37 +100,45 @@ def simulate(StateMatrix, MacroscopicMatrix, newImageMatrix, newStateMatrx, newM
 
                 tmpMacro = 0
 
-                if(stateN == 1):
-                    if(stateSolidS == 1):
-                        newStateMatrx[y][x][0] = 1
-                    else:
-                        tmpMacro += stateMacroN
-                        newStateMatrx[y][x][1] = 1
-                    #newImageMatrix[y][x] = [255, 0, 0]
-                if(stateS == 1):
-                    if(stateSolidN == 1):
-                        newStateMatrx[y][x][1] = 1
-                    else:
-                        newStateMatrx[y][x][0] = 1
-                        tmpMacro += stateMacroS
-                    #newImageMatrix[y][x] = [255, 0, 0]
-                if(stateW == 1):
-                    if(stateSolidE == 1):
-                        newStateMatrx[y][x][2] = 1
-                    else:
-                        newStateMatrx[y][x][3] = 1
-                        tmpMacro += stateMacroW
-                    #newImageMatrix[y][x] = [255, 0, 0]
-                if(stateE == 1):
-                    if(stateSolidW == 1):
-                        newStateMatrx[y][x][3] = 1
-                    else:
-                        newStateMatrx[y][x][2] = 1
-                        tmpMacro += stateMacroE
-                    #newImageMatrix[y][x] = [255, 0, 0]
+                # if(stateN == 1):
+                #     if(stateSolidS == 1):
+                #         newStateMatrx[y][x][0] = 1
+                #     else:
+                #         tmpMacro += stateMacroN
+                #         newStateMatrx[y][x][1] = 1
+                #     #newImageMatrix[y][x] = [255, 0, 0]
+                # if(stateS == 1):
+                #     if(stateSolidN == 1):
+                #         newStateMatrx[y][x][1] = 1
+                #     else:
+                #         newStateMatrx[y][x][0] = 1
+                #         tmpMacro += stateMacroS
+                #     #newImageMatrix[y][x] = [255, 0, 0]
+                # if(stateW == 1):
+                #     if(stateSolidE == 1):
+                #         newStateMatrx[y][x][2] = 1
+                #     else:
+                #         newStateMatrx[y][x][3] = 1
+                #         tmpMacro += stateMacroW
+                #     #newImageMatrix[y][x] = [255, 0, 0]
+                # if(stateE == 1):
+                #     if(stateSolidW == 1):
+                #         newStateMatrx[y][x][3] = 1
+                #     else:
+                #         newStateMatrx[y][x][2] = 1
+                #         tmpMacro += stateMacroE
+                #     #newImageMatrix[y][x] = [255, 0, 0]
+                if(stateMacroN > 0):
+                    tmpMacro += stateMacroN
+                if(stateMacroS > 0):
+                    tmpMacro += stateMacroS
+                if(stateMacroW > 0):
+                    tmpMacro += stateMacroW
+                if(stateMacroE > 0):
+                    tmpMacro += stateMacroE
                 tmpMacro = tmpMacro/4
-                newImageMatrix[y][x] = [(255.0*(tmpMacro)), 0, 0]
-                newMacroscopicMatrix[y][x]=tmpMacro
+                newImageMatrix[y][x] = [tmpMacro, 0, 0]
+                newMacroscopicMatrix[y][x] = tmpMacro
             else:
                 newStateMatrx[y][x][4] = 1
                 newImageMatrix[y][x] = [255, 255, 255]
