@@ -77,7 +77,16 @@
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CudaCompile Include="kernel.cu" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Visualization.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LBM0.h" />
+    <ClInclude Include="LBM_Atmos.h" />
+    <ClInclude Include="Visualization.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="LBM.cu" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
