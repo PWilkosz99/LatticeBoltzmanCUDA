@@ -506,3 +506,6 @@ FodyWeavers.xsd
 *.fatbin
 
 LBMDifussion/.vs/LBMDifussion/v16/*
+!LBMFluidFlow/lib
+!LBMFluidFlow/x64/Debug/freeglut.dll
+!LBMFluidFlow/x64/Debug/freeglutd.dll
