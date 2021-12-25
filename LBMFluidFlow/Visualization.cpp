@@ -1,4 +1,4 @@
-#include<Gl/glut.h>
+#include "glut.h"
 #include<math.h>
 #include<stdlib.h>
 #include "Visualization.h"
@@ -16,5 +16,5 @@ void Timer(int value)
 {
 	glColor3f(1.0, 1.0, 1.0);
 	glutPostRedisplay();
-	glutTimerFunc(50, Timer, 0);
+	glutTimerFunc(500, Timer, 0);
 }

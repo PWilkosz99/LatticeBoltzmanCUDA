@@ -1,4 +1,4 @@
-#include <Gl/glut.h>
+#include "glut.h"
 #include <math.h>
 #include <stdlib.h>
 #include "Visualization.h"

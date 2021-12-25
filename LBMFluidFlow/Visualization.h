@@ -1,7 +1,7 @@
 #ifndef Visualization_h
 #define Visualization_h
 
-#include<Gl/glut.h>
+#include "glut.h"
 #include<math.h>
 #include<stdlib.h>
 #include<string.h>
