@@ -15,10 +15,15 @@ void DrawLBM1();
 
 void DrawLBM2();
 
-void DrawAtmosHor();
+void DrawAtmosHor(char[Npic * Ny][Npic * Nx][3]);
 
-void DrawAtmosVer();
+void DrawAtmosVer(char[Npic * Ny][Npic * Nx][3]);
 
 void Timer(int value);
+
+void BMPout(char[Npic * Ny][Npic * Nx][3], char[10]);
+
+void DrawLine(int x0, int y0, int x1, int y1, char rgbp[Npic * Ny][Npic * Nx][3]);
+
 
 #endif // !Visualization_h

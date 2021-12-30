@@ -59,14 +59,26 @@ void KeyboardEsc(unsigned char key, int x, int y) //////////////////////
 
 void DrawLBM1() /////////////////////////////////////////////////////////
 {
+	auto rgb = new char[Npic * Ny][Npic * Nx][3];
 	if (mainLBM(FirstCycle) == 1) LastCycle = true;
-	DrawAtmosVer();
+	DrawAtmosVer(rgb);
+	const auto bmpfilelen = 11;
+	char bmpfile[bmpfilelen];
+	snprintf(bmpfile, bmpfilelen, "Uy%04d.bmp", icycle);
+	BMPout(rgb, bmpfile);
+	delete[] rgb;
 	FirstCycle = false;
 }
 
 void DrawLBM2() ///////////////////////////////////////////////////////
 {
-	DrawAtmosHor();
+	auto rgb = new char[Npic * Ny][Npic * Nx][3];
+	DrawAtmosHor(rgb);
+	const auto bmpfilelen = 11;
+	char bmpfile[bmpfilelen];
+	snprintf(bmpfile, bmpfilelen, "Ux%04d.bmp", icycle);
+	BMPout(rgb, bmpfile);
+	delete[] rgb;
 	FirstCycle = false;
 	if (LastCycle) { exit(0); }
 }

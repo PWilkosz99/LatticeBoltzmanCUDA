@@ -7,6 +7,7 @@
 
 #define Nx 256 // horizontal size of the space
 #define Ny 256 // vertical size of the space
+#define Npic 3 // magnification
 #define tauAtmos 1.0f // relaxation time constant
 
 extern __device__ __managed__ float timem, stept; // overall time, time step
