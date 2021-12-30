@@ -24,6 +24,7 @@ int mainLBM(bool FirstCycle)
 	if (FirstCycle)
 	{
 		FirstCycle = false;
+		if (!NewSim) InRes();
 		InitialAtmos << < grid, block >> > ();
 		cudaDeviceSynchronize();
 		timem = 0.0f; timev = 0.0f;
@@ -48,6 +49,6 @@ int mainLBM(bool FirstCycle)
 		}
 		{ timev = 0.0f; ipass++; }
 	}
-	if (ipass >= npasses) { return 1; }; // exit if it is the last cycle
+	if (ipass >= npasses) { OutRes(); return 1; }; // exit if it was the last cycle
 	return 0;
 }

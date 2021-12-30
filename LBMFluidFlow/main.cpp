@@ -80,5 +80,6 @@ void DrawLBM2() ///////////////////////////////////////////////////////
 	BMPout(rgb, bmpfile);
 	delete[] rgb;
 	FirstCycle = false;
+	icycle++;
 	if (LastCycle) { exit(0); }
 }

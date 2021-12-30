@@ -9,6 +9,7 @@
 #define Ny 256 // vertical size of the space
 #define Npic 3 // magnification
 #define tauAtmos 1.0f // relaxation time constant
+#define NewSim true // flag of new simulation
 
 extern __device__ __managed__ float timem, stept; // overall time, time step
 struct Dist { float fC, fE, fW, fS, fN, fSE, fSW, fNE, fNW; }; // distribution function D2Q9

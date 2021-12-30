@@ -77,13 +77,15 @@ __global__ void InitialAtmos()
 {
 	unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
 	unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
-	// Initial density and velocity, equilibrium and input distribution functions 
-	if (x == 0 || x == Nx - 1 || y == 0 || y == Ny - 1) {
-		AtmosVx[x][y] = (1.0f * y / Ny) * 0.05; // velocity from 0 to 0.05
+	if (NewSim) {
+		// Initial density and velocity, equilibrium and input distribution functions
+		if (x == 0 || x == Nx - 1 || y == 0 || y == Ny - 1) {
+			AtmosVx[x][y] = (1.0f * y / Ny) * 0.05; // velocity from 0 to 0.05
+		}
+		else { AtmosVx[x][y] = 0.0f; }
+		AtmosVy[x][y] = 0.0f;
+		AtmosRho[x][y] = 1.0f;
 	}
-	else { AtmosVx[x][y] = 0.0f; }
-	AtmosVy[x][y] = 0.0f;
-	AtmosRho[x][y] = 1.0f;
 
 	float vx2 = AtmosVx[x][y] * AtmosVx[x][y];
 	float vy2 = AtmosVy[x][y] * AtmosVy[x][y];
@@ -172,5 +174,31 @@ __global__ void StreamingAtmos()
 		Atmosin[x][y].fW = Atmosout[x][y].fW; Atmosin[x][y].fSW = Atmosout[x][y].fSW; Atmosin[x][y].fNW = Atmosout[x][y].fNW;
 		Atmosin[x][y].fN = Atmosout[x][y].fN; Atmosin[x][y].fS = Atmosout[x][y].fS;
 	}
+}
+
+void OutRes()
+{
+	using namespace std;
+	std::ofstream ResultsOut; // file with output data
+	ResultsOut.open("ResultsOut.txt", ios::out | ios::trunc);
+	for (int i = 0; i < Nx; i++) {
+		for (int j = 0; j < Ny; j++) {
+			ResultsOut << AtmosRho[i][j] << " " << AtmosVx[i][j] << " " << AtmosVy[i][j] << endl;
+		}
+	}
+	ResultsOut.close();
+}
+
+void InRes()
+{
+	using namespace std;
+	std::fstream ResultsOut; // file with input data
+	ResultsOut.open("ResultsOut.txt", ios::in);
+	for (int i = 0; i < Nx; i++) {
+		for (int j = 0; j < Ny; j++) {
+			ResultsOut >> AtmosRho[i][j] >> AtmosVx[i][j] >> AtmosVy[i][j]; // read data
+		}
+	}
+	ResultsOut.close();
 }
 
