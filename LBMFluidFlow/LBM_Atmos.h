@@ -35,6 +35,30 @@ void DrawAtmosHor(char rgba[Npic * Ny][Npic * Nx][3])
 			glVertex3f(i + 1, j, 0.0);
 			glEnd();
 			DrawLine(Npic * (i + 0.5), Npic * (j + 0.5), Npic * (i + 0.5 + 500 * AtmosVx[i][j]), Npic * (j + 0.5 + 500 * AtmosVy[i][j]), rgba);
+			// Visualization of particle motion 
+			float mu = 0.9f, grav = 0.005f;
+			for (int iterp = 1; iterp <= 5; iterp++)
+			{
+				float xpart0, xpart1, ypart0, ypart1, vxpart0, vypart0, vxpart1, vypart1;
+				xpart0 = xpart1 = 0.0, ypart0 = ypart1 = iterp * Nx / 5 - 1.0f;
+				vxpart0 = AtmosVx[int(xpart0)][int(ypart0)], vypart0 = AtmosVy[int(xpart0)][int(ypart0)];
+				while (xpart1 < Nx - 1 && ypart1 > 0.0 && ypart1 <= Ny - 1 && xpart1 >= 0.0)
+				{
+					glBegin(GL_LINES);
+					glVertex3f(xpart0, ypart0, 0.);
+					vxpart1 = mu * vxpart0 + (1.0f - mu) *
+						AtmosVx[int(xpart0)][int(ypart0)];
+					vypart1 = mu * vypart0 + (1.0f - mu) *
+						AtmosVy[int(xpart0)][int(ypart0)] - grav;
+					xpart1 = xpart0 + 100.f * (vxpart0 + vxpart1) / 2.0f;
+					ypart1 = ypart0 + 100.f * (vypart0 + vypart1) / 2.0f;
+					vxpart0 = vxpart1; vypart0 = vypart1;
+					glVertex3f(xpart1, ypart1, 0.);
+					glEnd();
+					DrawLine(Npic * xpart0, Npic * ypart0, Npic * xpart1, Npic * ypart1, rgba);
+					xpart0 = xpart1; ypart0 = ypart1;
+				};
+			}
 		}
 	}
 	glutSwapBuffers();
@@ -57,7 +81,8 @@ void DrawAtmosVer(char rgba[Npic * Ny][Npic * Nx][3])
 				for (int ii = 0; ii < Npic; ii++)
 				{
 					rgba[Npic * j + jj][Npic * i + ii][0] = 255 * CellBlue;
-					rgba[Npic * j + jj][Npic * i + ii][1] = 255 * CellGreen; rgba[Npic * j + jj][Npic * i + ii][2] = 255 * CellRed;
+					rgba[Npic * j + jj][Npic * i + ii][1] = 255 * CellGreen; 
+					rgba[Npic * j + jj][Npic * i + ii][2] = 255 * CellRed;
 				}
 			}
 			glColor3f(CellRed, CellGreen, CellBlue);
@@ -68,6 +93,30 @@ void DrawAtmosVer(char rgba[Npic * Ny][Npic * Nx][3])
 			glVertex3f(i + 1, j, 0.0);
 			glEnd();
 			DrawLine(Npic * (i + 0.5), Npic * (j + 0.5), Npic * (i + 0.5 + 500 * AtmosVx[i][j]), Npic * (j + 0.5 + 500 * AtmosVy[i][j]), rgba);
+			// Visualization of particle motion 
+			float mu = 0.9f, grav = 0.005f;
+			for (int iterp = 1; iterp <= 5; iterp++)
+			{
+				float xpart0, xpart1, ypart0, ypart1, vxpart0, vypart0, vxpart1, vypart1;
+				xpart0 = xpart1 = 0.0, ypart0 = ypart1 = iterp * Nx / 5 - 1.0f;
+				vxpart0 = AtmosVx[int(xpart0)][int(ypart0)], vypart0 = AtmosVy[int(xpart0)][int(ypart0)];
+				while (xpart1 < Nx - 1 && ypart1 > 0.0 && ypart1 <= Ny - 1 && xpart1 >= 0.0)
+				{
+					glBegin(GL_LINES);
+					glVertex3f(xpart0, ypart0, 0.);
+					vxpart1 = mu * vxpart0 + (1.0f - mu) *
+						AtmosVx[int(xpart0)][int(ypart0)];
+					vypart1 = mu * vypart0 + (1.0f - mu) *
+						AtmosVy[int(xpart0)][int(ypart0)] - grav;
+					xpart1 = xpart0 + 100.f * (vxpart0 + vxpart1) / 2.0f;
+					ypart1 = ypart0 + 100.f * (vypart0 + vypart1) / 2.0f;
+					vxpart0 = vxpart1; vypart0 = vypart1;
+					glVertex3f(xpart1, ypart1, 0.);
+					glEnd();
+					DrawLine(Npic * xpart0, Npic * ypart0, Npic * xpart1, Npic * ypart1, rgba);
+					xpart0 = xpart1; ypart0 = ypart1;
+				};
+			}
 		}
 	}
 	glutSwapBuffers();
