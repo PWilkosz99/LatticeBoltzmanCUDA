@@ -25,7 +25,7 @@ void BMPout(char rgbp[Npic * Ny][Npic * Nx][3], char* bmpfile)
 	const int height = Npic * Ny;
 	using namespace std;
 	FILE* pFile = fopen(bmpfile, "wb"); // wb -> w: writable b: binary, open as writableand binary
-		if (pFile == NULL) { return; }
+	if (pFile == NULL) { return; }
 	BITMAPINFOHEADER BMIH; // BMP header
 	BMIH.biSizeImage = width * height * 3;
 	// Create the bitmap for this OpenGL context
@@ -45,18 +45,23 @@ void BMPout(char rgbp[Npic * Ny][Npic * Nx][3], char* bmpfile)
 	bmfh.bfSize = lFileSize;
 	bmfh.bfReserved1 = bmfh.bfReserved2 = 0;
 	// Write the bitmap file header // Saving the first header to file
-		UINT nWrittenFileHeaderSize = fwrite(&bmfh, 1, sizeof(BITMAPFILEHEADER),
-			pFile);
+	UINT nWrittenFileHeaderSize = fwrite(&bmfh, 1, sizeof(BITMAPFILEHEADER),
+		pFile);
 	// And then the bitmap info header // Saving the second header to file
-		UINT nWrittenInfoHeaderSize = fwrite(&BMIH, 1, sizeof(BITMAPINFOHEADER),
-			pFile);
+	UINT nWrittenInfoHeaderSize = fwrite(&BMIH, 1, sizeof(BITMAPINFOHEADER),
+		pFile);
 	// Finally, write the image data itself
 	//-- the data represents our drawing // Saving the file content in lpBits to file
-		UINT nWrittenDIBDataSize = fwrite(rgbp, 1, lImageSize, pFile);
+	UINT nWrittenDIBDataSize = fwrite(rgbp, 1, lImageSize, pFile);
 	fclose(pFile); // closing the file.
 }
 
 void DrawLine(int x0, int y0, int x1, int y1, char rgbp[Npic * Ny][Npic * Nx][3])
+{
+	DrawLine(x0, y0, x1, y1, rgbp, new int[3]{ 0,0,0 });
+}
+
+void DrawLine(int x0, int y0, int x1, int y1, char rgbp[Npic * Ny][Npic * Nx][3], int color[3])
 {
 	x0 = std::max(0, std::min(Npic * Nx - 1, x0));
 	x1 = std::max(0, std::min(Npic * Nx - 1, x1));
@@ -70,7 +75,7 @@ void DrawLine(int x0, int y0, int x1, int y1, char rgbp[Npic * Ny][Npic * Nx][3]
 			for (int y = y0; y <= y1; y++)
 			{
 				int x = x0 + 1.0 * (x1 - x0) / (y1 - y0) * (y - y0);
-				rgbp[y][x][0] = 0; rgbp[y][x][1] = 0; rgbp[y][x][2] = 0;
+				rgbp[y][x][0] = color[0]; rgbp[y][x][1] = color[1]; rgbp[y][x][2] = color[2];
 			}
 		}
 		else
@@ -78,7 +83,7 @@ void DrawLine(int x0, int y0, int x1, int y1, char rgbp[Npic * Ny][Npic * Nx][3]
 			for (int y = y1; y <= y0; y++)
 			{
 				int x = x1 + 1.0 * (x1 - x0) / (y1 - y0) * (y - y1);
-				rgbp[y][x][0] = 0; rgbp[y][x][1] = 0; rgbp[y][x][2] = 0;
+				rgbp[y][x][0] = color[0]; rgbp[y][x][1] = color[1]; rgbp[y][x][2] = color[2];
 			}
 		}
 	}
@@ -89,7 +94,7 @@ void DrawLine(int x0, int y0, int x1, int y1, char rgbp[Npic * Ny][Npic * Nx][3]
 			for (int x = x0; x <= x1; x++)
 			{
 				int y = y0 + 1.0 * (y1 - y0) / (x1 - x0) * (x - x0);
-				rgbp[y][x][0] = 0; rgbp[y][x][1] = 0; rgbp[y][x][2] = 0;
+				rgbp[y][x][0] = color[0]; rgbp[y][x][1] = color[1]; rgbp[y][x][2] = color[2];
 			}
 		}
 		else
@@ -98,7 +103,7 @@ void DrawLine(int x0, int y0, int x1, int y1, char rgbp[Npic * Ny][Npic * Nx][3]
 			for (int x = x1; x <= x0; x++)
 			{
 				int y = y1 + 1.0 * (y1 - y0) / (x1 - x0) * (x - x1);
-				rgbp[y][x][0] = 0; rgbp[y][x][1] = 0; rgbp[y][x][2] = 0;
+				rgbp[y][x][0] = color[0]; rgbp[y][x][1] = color[1]; rgbp[y][x][2] = color[2];
 			}
 		}
 	}
