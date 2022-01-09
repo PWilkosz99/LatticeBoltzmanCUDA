@@ -11,6 +11,11 @@
 #define tauAtmos 1.0f // relaxation time constant
 #define NewSim true // flag of new simulation
 
+#define BoundaryCEast 4 // 1- bounce-back, 2 - symmetry, 3 - velocity, 4 - rho
+#define BoundaryCWest 3
+#define BoundaryCNord 2
+#define BoundaryCSouth 1
+
 extern __device__ __managed__ float timem, stept; // overall time, time step
 struct Dist { float fC, fE, fW, fS, fN, fSE, fSW, fNE, fNW; }; // distribution function D2Q9
 extern __device__ __managed__ float AtmosRho[Nx][Ny]; // density

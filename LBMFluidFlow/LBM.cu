@@ -21,6 +21,8 @@ int mainLBM(bool FirstCycle)
 	using namespace std;
 	dim3 block(8, 8, 1); // it could be different
 	dim3 grid(Nx / block.x, Ny / block.y, 1);
+	dim3 gridX(1, Nx / block.y, 1);
+	dim3 gridY(1, Ny / block.y, 1);
 	if (FirstCycle)
 	{
 		FirstCycle = false;
@@ -44,6 +46,12 @@ int mainLBM(bool FirstCycle)
 			cudaDeviceSynchronize();
 
 			StreamingAtmos << < grid, block >> > ();
+			cudaDeviceSynchronize();
+
+			BoundaryEast << < gridX, block >> > ();
+			BoundaryWest << < gridX, block >> > ();
+			BoundarySouth << < gridY, block >> > ();
+			BoundaryNord << < gridY, block >> > ();
 			cudaDeviceSynchronize();
 			timem += stept; timev += stept;
 		}
